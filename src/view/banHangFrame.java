@@ -86,7 +86,6 @@ public class banHangFrame extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Hóa Đơn Chờ");
 
-        tblHoaDonCho.setBackground(new java.awt.Color(255, 255, 255));
         tblHoaDonCho.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         tblHoaDonCho.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -106,9 +105,7 @@ public class banHangFrame extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblHoaDonCho);
 
-        btnTaoHoaDon.setBackground(new java.awt.Color(255, 255, 255));
         btnTaoHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnTaoHoaDon.setForeground(new java.awt.Color(0, 0, 0));
         btnTaoHoaDon.setText("Tạo Hóa Đơn");
         btnTaoHoaDon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -195,9 +192,7 @@ public class banHangFrame extends javax.swing.JFrame {
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel13.setText("Tiền hoàn lại");
 
-        btnTaoHoaDon1.setBackground(new java.awt.Color(255, 255, 255));
         btnTaoHoaDon1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnTaoHoaDon1.setForeground(new java.awt.Color(0, 0, 0));
         btnTaoHoaDon1.setText("Thanh toán");
         btnTaoHoaDon1.setToolTipText("");
         btnTaoHoaDon1.addActionListener(new java.awt.event.ActionListener() {
@@ -206,9 +201,7 @@ public class banHangFrame extends javax.swing.JFrame {
             }
         });
 
-        btnTaoHoaDon2.setBackground(new java.awt.Color(255, 255, 255));
         btnTaoHoaDon2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnTaoHoaDon2.setForeground(new java.awt.Color(0, 0, 0));
         btnTaoHoaDon2.setText("Xoá ");
         btnTaoHoaDon2.setToolTipText("");
         btnTaoHoaDon2.addActionListener(new java.awt.event.ActionListener() {
@@ -222,9 +215,7 @@ public class banHangFrame extends javax.swing.JFrame {
 
         jButton2.setText("Tìm");
 
-        btnTaoHoaDon3.setBackground(new java.awt.Color(255, 255, 255));
         btnTaoHoaDon3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnTaoHoaDon3.setForeground(new java.awt.Color(0, 0, 0));
         btnTaoHoaDon3.setText("Xác nhận");
         btnTaoHoaDon3.setToolTipText("");
         btnTaoHoaDon3.addActionListener(new java.awt.event.ActionListener() {
