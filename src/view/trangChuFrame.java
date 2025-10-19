@@ -310,7 +310,7 @@ public class trangChuFrame extends javax.swing.JFrame {
 
     private void btnTaikhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaikhoanActionPerformed
         // TODO add your handling code here:
-        hienBang(new taiKhoanPanel1());
+        hienBang(new taiKhoanNVPanel1());
     }//GEN-LAST:event_btnTaikhoanActionPerformed
 
     private void btnDanhmucMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDanhmucMouseClicked
