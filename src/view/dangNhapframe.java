@@ -4,17 +4,66 @@
  */
 package view;
 
+import java.beans.Statement;
+import java.sql.Connection;
+import ulti.ConnectDB;
+import java.sql.*;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author nem mèn mén
  */
 public class dangNhapframe extends javax.swing.JFrame {
 
+    
     /**
      * Creates new form dangNhapframe
      */
     public dangNhapframe() {
         initComponents();
+        btnDangnhap.addActionListener(e -> dangNhap());
+        btnThoat.addActionListener(e -> System.exit(0));
+    }
+    private void dangNhap() {
+        String tk = txtTaikhoan.getText().trim();
+        String mk = new String(txtMatkhau.getPassword()).trim();
+
+        try (Connection con = ConnectDB.getConnect()) {
+            String sql = "SELECT * FROM NhanVien WHERE tenTaiKhoan=? AND password=?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, tk);
+            stmt.setString(2, mk);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String quyen = rs.getString("Quyen");
+                JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
+                NhanVienEntity nv = new NhanVienEntity(rs.getString("Matkhau"), rs.getString("tenNV"),
+                        rs.getString("Email"), rs.getString("permission"), rs.getInt("SDT"), rs.getDate("namSinh"));
+                if ("Nhân Viên".equalsIgnoreCase(quyen)) {
+                    new SalesMgrJF(tk, false).setVisible(true);
+                    System.out.println("Username: " + tk);// Truyền tên tài khoản vào
+                    System.out.println("Password: " + mk);
+                } else if ("Quản Lý".equalsIgnoreCase(quyen)) {
+                    new InterfaceJF(tk).setVisible(true);
+                    System.out.println("Username: " + tk);// Truyền tên tài khoản vào
+                    System.out.println("Password: " + mk);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Không xác định được quyền truy cập.");
+                    return;
+                }
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+        }
+    }
+
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(() -> new dangNhapframe().setVisible(true));
     }
    
 
@@ -159,8 +208,7 @@ public class dangNhapframe extends javax.swing.JFrame {
 
     private void btnDangnhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangnhapActionPerformed
         // TODO add your handling code here:
-        String taiKhoan = txtTaikhoan.getText();
-        String matKhau = txtMatkhau.getText();
+      
         
     }//GEN-LAST:event_btnDangnhapActionPerformed
 
