@@ -151,6 +151,8 @@ public class taiKhoanNVPanel1 extends javax.swing.JPanel {
         }
         return false;
     }
+    
+    
 
     public void resetSearch() {
         txtTimkiem.getDocument().addDocumentListener(new DocumentListener() {
@@ -179,11 +181,11 @@ public class taiKhoanNVPanel1 extends javax.swing.JPanel {
                             || tenNV.contains(tuKhoa)) {
 
                         model.addRow(new Object[]{
-                            nv.getTenTK(),
                             nv.getMaTK(),
+                            nv.getTenTK(),
                             nv.getEmail(),
                             nv.getSdt(),
-                            "********",
+                            nv.getPassword(),
                             nv.getPermission()
                         });
                     }
