@@ -4,7 +4,8 @@
  */
 package view;
 
-import java.beans.Statement;
+import entity.TaiKhoanNVEntity;
+import java.sql.Statement;
 import java.sql.Connection;
 import ulti.ConnectDB;
 import java.sql.*;
@@ -25,46 +26,43 @@ public class dangNhapframe extends javax.swing.JFrame {
         btnDangnhap.addActionListener(e -> dangNhap());
         btnThoat.addActionListener(e -> System.exit(0));
     }
-    private void dangNhap() {
-        String tk = txtTaikhoan.getText().trim();
-        String mk = new String(txtMatkhau.getPassword()).trim();
+        
+private void dangNhap() {
+    String tk = txtTaikhoan.getText().trim();
+    String mk = new String(txtMatkhau.getPassword()).trim();
 
-        try (Connection con = ConnectDB.getConnect()) {
-            String sql = "SELECT * FROM NhanVien WHERE tenTaiKhoan=? AND password=?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, tk);
-            stmt.setString(2, mk);
+    if (tk.isEmpty() || mk.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Vui lòng nhập đủ tài khoản và mật khẩu!");
+        return;
+    }
 
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                String quyen = rs.getString("Quyen");
-                JOptionPane.showMessageDialog(this, "Đăng nhập thành công!");
-                NhanVienEntity nv = new NhanVienEntity(rs.getString("Matkhau"), rs.getString("tenNV"),
-                        rs.getString("Email"), rs.getString("permission"), rs.getInt("SDT"), rs.getDate("namSinh"));
-                if ("Nhân Viên".equalsIgnoreCase(quyen)) {
-                    new SalesMgrJF(tk, false).setVisible(true);
-                    System.out.println("Username: " + tk);// Truyền tên tài khoản vào
-                    System.out.println("Password: " + mk);
-                } else if ("Quản Lý".equalsIgnoreCase(quyen)) {
-                    new InterfaceJF(tk).setVisible(true);
-                    System.out.println("Username: " + tk);// Truyền tên tài khoản vào
-                    System.out.println("Password: " + mk);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Không xác định được quyền truy cập.");
-                    return;
-                }
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+    try (Connection con = ConnectDB.getConnect()) {
+        String sql = "SELECT * FROM TaiKhoanNV WHERE tenTaiKhoan=? AND password=?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, tk);
+        stmt.setString(2, mk);
+
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            String quyen = rs.getString("permission");
+
+            JOptionPane.showMessageDialog(this, 
+                "Đăng nhập thành công với vai trò: " + quyen);
+
+           
+            trangChuFrame trangChu = new trangChuFrame(tk, quyen);
+            trangChu.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!");
         }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage());
+        e.printStackTrace();
     }
+}
 
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> new dangNhapframe().setVisible(true));
-    }
+ 
    
 
     /**
@@ -79,13 +77,13 @@ public class dangNhapframe extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtTaikhoan = new javax.swing.JTextField();
-        txtMatkhau = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btnDangnhap = new javax.swing.JButton();
         btnThoat = new javax.swing.JButton();
+        txtMatkhau = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(128, 128, 128));
@@ -114,21 +112,18 @@ public class dangNhapframe extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(114, 114, 114)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(128, 128, 128)
-                        .addComponent(jLabel5))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(114, 114, 114)
-                        .addComponent(jLabel4)))
-                .addContainerGap(118, Short.MAX_VALUE))
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel4))
+                .addContainerGap(132, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(90, 90, 90)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(78, 78, 78)
                 .addComponent(jLabel5)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -151,6 +146,8 @@ public class dangNhapframe extends javax.swing.JFrame {
         btnThoat.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnThoat.setForeground(new java.awt.Color(30, 30, 30));
         btnThoat.setText("Thoát");
+
+        txtMatkhau.setText("jPasswordField1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -187,15 +184,15 @@ public class dangNhapframe extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtTaikhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtMatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                    .addComponent(txtMatkhau, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDangnhap, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -256,7 +253,7 @@ public class dangNhapframe extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField txtMatkhau;
+    private javax.swing.JPasswordField txtMatkhau;
     private javax.swing.JTextField txtTaikhoan;
     // End of variables declaration//GEN-END:variables
 }
