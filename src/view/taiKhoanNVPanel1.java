@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package view;
+
 import dao.TaiKhoanNVDAO;
 import entity.TaiKhoanNVEntity;
 import java.text.ParseException;
@@ -17,138 +18,140 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableRowSorter;
 
-
-
-
-
-
-
-
-
-
 /**
  *
  * @author nem mèn mén
  */
 public class taiKhoanNVPanel1 extends javax.swing.JPanel {
+
     int row;
     TaiKhoanNVDAO dao = new TaiKhoanNVDAO();
     List<TaiKhoanNVEntity> listNV = dao.getAll();
+
     /**
      * Creates new form TaiKhoanNhanVien
      */
-    
-    public taiKhoanNVPanel1(){
+    public taiKhoanNVPanel1() {
         initComponents();
         fillTable();
         resetSearch();
         JLabel lbl = new JLabel("Đây là giao diện quản lý nhân viên");
         add(lbl);
     }
+
     public void fillTable() {
-    DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
-    model.setRowCount(0); 
+        DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
+        model.setRowCount(0);
 
-    for (TaiKhoanNVEntity nv : dao.getAll()) {
-        String Password = "********";
-        Object row[] = {
-            nv.getTenTK(),    
-            nv.getMaTK(),      
-            nv.getEmail(),      
-            nv.getSdt(),           
-            nv.getPassword(),
-            nv.getPermission()  
-        };
-        model.addRow(row);
-    }
-    tblNhanVien.setModel(model);
-    }
-    public TaiKhoanNVEntity getNhanVien() {
-    try {
-        long maTK = 1;
-        if (!txtMaTK.getText().trim().isEmpty()) {
-            maTK = Long.parseLong(txtMaTK.getText().trim());
+        for (TaiKhoanNVEntity nv : dao.getAll()) {
+            String Password = "********";
+            Object row[] = {
+                nv.getMaTK(),
+                nv.getTenTK(),
+                nv.getEmail(),
+                nv.getSdt(),
+                nv.getPassword(),
+                nv.getPermission()
+            };
+            model.addRow(row);
         }
+        tblNhanVien.setModel(model);
+    }
 
-        String tenTK = txtTenTK.getText();
-        String email = txtEmail.getText();
-        String password = txtPassword.getText();
-
-        int sdt;
+    public TaiKhoanNVEntity getNhanVien() {
         try {
-            sdt = Integer.parseInt(txtSDT.getText().trim());
+            long maTK = 1;
+            if (!txtMaTK.getText().trim().isEmpty()) {
+                maTK = Long.parseLong(txtMaTK.getText().trim());
+            }
+
+            String tenTK = txtTenTK.getText();
+            String email = txtEmail.getText();
+            String password = txtPassword.getText();
+
+            int sdt;
+            try {
+                sdt = Integer.parseInt(txtSDT.getText().trim());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ (phải là số nguyên)");
+                return null;
+            }
+
+            String permission = rdoNhanVien.isSelected() ? "Nhân Viên" : "Quản Lý";
+            System.out.println(tenTK);
+            System.out.println(email);
+            System.out.println(password);
+            System.out.println(permission);
+
+            return new TaiKhoanNVEntity(maTK, password, tenTK, email, permission, sdt);
+
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ (phải là số nguyên)");
+            JOptionPane.showMessageDialog(null, "Mã tài khoản không hợp lệ");
+            return null;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Lỗi không xác định: " + e.getMessage());
             return null;
         }
-
-        String permission = rdoNhanVien.isSelected() ? "Nhân Viên" : "Quản Lý";
-
-        return new TaiKhoanNVEntity(maTK, password, tenTK, email, permission, sdt );
-
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Mã tài khoản không hợp lệ");
-        return null;
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Lỗi không xác định: " + e.getMessage());
-        return null;
     }
-    }
+
     public void setNhanVien(TaiKhoanNVEntity nv) {
-    txtMaTK.setText(String.valueOf(nv.getMaTK()));
-    txtTenTK.setText(nv.getTenTK());
-    txtEmail.setText(nv.getEmail());
-    txtPassword.setText(nv.getPassword());
-    txtSDT.setText(String.valueOf(nv.getSdt()));
-    
-    if ("Nhân Viên".equalsIgnoreCase(nv.getPermission())) {
-        rdoNhanVien.setSelected(true);
-    } else {
-        rdoQuanLy.setSelected(true);
-    }
-}
-    public boolean kiemTraTrungEmailPasswordSDT(String email, String tenTK, int sdt) {
-    boolean emailTrung = false;
-    boolean tenTKTrung = false;
-    boolean sdtTrung = false;
-    List<TaiKhoanNVEntity> listNV = dao.getAll();
+        txtMaTK.setText(String.valueOf(nv.getMaTK()));
+        txtTenTK.setText(nv.getTenTK());
+        txtEmail.setText(nv.getEmail());
+        txtPassword.setText(nv.getPassword());
+        txtSDT.setText(String.valueOf(nv.getSdt()));
 
-    for (TaiKhoanNVEntity nv : listNV) {
-        if (nv.getEmail().equalsIgnoreCase(email)) {
-            emailTrung = true;
+        if ("Nhân Viên".equalsIgnoreCase(nv.getPermission())) {
+            rdoNhanVien.setSelected(true);
+        } else {
+            rdoQuanLy.setSelected(true);
         }
-        if (nv.getTenTK().equalsIgnoreCase(tenTK)) {
-            tenTKTrung = true;
-        }
-        if (nv.getSdt() == sdt) {
-            sdtTrung = true;
-        }
+    }
+
+    public boolean kiemTraTrungEmailPasswordSDT(String email, String tenTK, int sdt) {
+        System.out.println(email);
+        boolean emailTrung = false;
+        boolean tenTKTrung = false;
+        boolean sdtTrung = false;
+        List<TaiKhoanNVEntity> listNV = dao.getAll();
+
+        for (TaiKhoanNVEntity nv : listNV) {
+            if (nv.getEmail().equalsIgnoreCase(email)) {
+                emailTrung = true;
             }
-    if (emailTrung && tenTKTrung && sdtTrung) {
-        JOptionPane.showMessageDialog(null, "Email, tên tài khoản và số điện thoại đã tồn tại!");
-        return true;
-    } else if (emailTrung && tenTKTrung) {
-        JOptionPane.showMessageDialog(null, "Email và tên tài khoản đã tồn tại!");
-        return true;
-    } else if (emailTrung && sdtTrung) {
-        JOptionPane.showMessageDialog(null, "Email và số điện thoại đã tồn tại!");
-        return true;
-    } else if (tenTKTrung && sdtTrung) {
-        JOptionPane.showMessageDialog(null, "Tên tài khoản và số điện thoại đã tồn tại!");
-        return true;
-    } else if (emailTrung) {
-        JOptionPane.showMessageDialog(null, "Email đã tồn tại!");
-        return true;
-    } else if (tenTKTrung) {
-        JOptionPane.showMessageDialog(null, "Tên tài khoản đã tồn tại!");
-        return true;
-    } else if (sdtTrung) {
-        JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!");
-        return true;
+            if (nv.getTenTK().equalsIgnoreCase(tenTK)) {
+                tenTKTrung = true;
+            }
+            if (nv.getSdt() == sdt) {
+                sdtTrung = true;
+            }
+        }
+        if (emailTrung && tenTKTrung && sdtTrung) {
+            JOptionPane.showMessageDialog(null, "Email, tên tài khoản và số điện thoại đã tồn tại!");
+            return true;
+        } else if (emailTrung && tenTKTrung) {
+            JOptionPane.showMessageDialog(null, "Email và tên tài khoản đã tồn tại!");
+            return true;
+        } else if (emailTrung && sdtTrung) {
+            JOptionPane.showMessageDialog(null, "Email và số điện thoại đã tồn tại!");
+            return true;
+        } else if (tenTKTrung && sdtTrung) {
+            JOptionPane.showMessageDialog(null, "Tên tài khoản và số điện thoại đã tồn tại!");
+            return true;
+        } else if (emailTrung) {
+            JOptionPane.showMessageDialog(null, "Email đã tồn tại!");
+            return true;
+        } else if (tenTKTrung) {
+            JOptionPane.showMessageDialog(null, "Tên tài khoản đã tồn tại!");
+            return true;
+        } else if (sdtTrung) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại đã tồn tại!");
+            return true;
+        }
+        return false;
     }
-    return false;
-    }
-        public void resetSearch(){
+
+    public void resetSearch() {
         txtTimkiem.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 timKiem();
@@ -163,33 +166,30 @@ public class taiKhoanNVPanel1 extends javax.swing.JPanel {
             }
 
             private void timKiem() {
-    String tuKhoa = txtTimkiem.getText().trim().toLowerCase();
-    DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
-    model.setRowCount(0); // Xóa dữ liệu cũ
+                String tuKhoa = txtTimkiem.getText().trim().toLowerCase();
+                DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
+                model.setRowCount(0); // Xóa dữ liệu cũ
 
-    for (TaiKhoanNVEntity nv : listNV) {
-        String maNV = String.valueOf(nv.getMaTK());
-        String tenNV = nv.getTenTK().toLowerCase();
-        if (tuKhoa.isEmpty() ||
-            maNV.contains(tuKhoa) ||
-            tenNV.contains(tuKhoa)) {
+                for (TaiKhoanNVEntity nv : listNV) {
+                    String maNV = String.valueOf(nv.getMaTK());
+                    String tenNV = nv.getTenTK().toLowerCase();
+                    if (tuKhoa.isEmpty()
+                            || maNV.contains(tuKhoa)
+                            || tenNV.contains(tuKhoa)) {
 
-            model.addRow(new Object[]{               
-                nv.getTenTK(),
-                nv.getMaTK(),
-                nv.getEmail(),
-                nv.getSdt(),
-                "********", 
-                nv.getPermission()
-            });
-        }
-    }
-}
+                        model.addRow(new Object[]{
+                            nv.getTenTK(),
+                            nv.getMaTK(),
+                            nv.getEmail(),
+                            nv.getSdt(),
+                            "********",
+                            nv.getPermission()
+                        });
+                    }
+                }
+            }
         });
     }
-    
-
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -277,15 +277,20 @@ public class taiKhoanNVPanel1 extends javax.swing.JPanel {
 
         tblNhanVien.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã tài khoản", "Tên tài khoản", "Email", "SDT", "Quyền"
+                "Mã tài khoản", "Tên tài khoản", "Email", "SDT", "Mật Khẩu", "Quyền"
             }
         ));
+        tblNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblNhanVienMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblNhanVien);
 
         jLabel1.setText("Tìm kiếm");
@@ -439,49 +444,70 @@ public class taiKhoanNVPanel1 extends javax.swing.JPanel {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         TaiKhoanNVEntity nv = getNhanVien();
-if (nv == null) return; // lỗi nhập ngày hoặc sdt sai
 
-if (!kiemTraTrungEmailPasswordSDT(nv.getEmail(), nv.getTenTK(), nv.getSdt())) {
-    dao.insert(nv);
-    JOptionPane.showMessageDialog(null, "Thêm nhân viên thành công!");
-    fillTable();
-} else {
-    // Bị trùng nên không thêm
-}
+        if (nv == null) {
+            return; // lỗi nhập ngày hoặc sdt sai
+        }
+        if (!kiemTraTrungEmailPasswordSDT(nv.getEmail(), nv.getTenTK(), nv.getSdt())) {
+            dao.insert(nv);
+            JOptionPane.showMessageDialog(null, "Thêm nhân viên thành công!");
+            fillTable();
+        } else {            // Bị trùng nên không thêm
+        }
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
         TaiKhoanNVEntity nv = this.getNhanVien();
-    if (nv != null) {
-        this.dao.update(nv); 
-        JOptionPane.showMessageDialog(btnSua, "Cập nhật tài khoản nhân viên thành công");
-        fillTable(); 
-    }
+        if (nv != null) {
+            this.dao.update(nv);
+            JOptionPane.showMessageDialog(btnSua, "Cập nhật tài khoản nhân viên thành công");
+            fillTable();
+        }
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
         try {
-        if (!txtMaTK.getText().trim().isEmpty()) {
-            long maTK = Long.parseLong(txtMaTK.getText().trim());
+            if (!txtMaTK.getText().trim().isEmpty()) {
+                long maTK = Long.parseLong(txtMaTK.getText().trim());
 
-            int confirm = JOptionPane.showConfirmDialog(
-                this, "Bạn có chắc muốn xóa tài khoản này?", "Xác nhận", JOptionPane.YES_NO_OPTION
-            );
+                int confirm = JOptionPane.showConfirmDialog(
+                        this, "Bạn có chắc muốn xóa tài khoản này?", "Xác nhận", JOptionPane.YES_NO_OPTION
+                );
 
-            if (confirm == JOptionPane.YES_OPTION) {
-                this.dao.delete(maTK); // Gọi DAO xóa theo mã
-                JOptionPane.showMessageDialog(btnXoa, "Xóa tài khoản nhân viên thành công");
-                fillTable(); 
+                if (confirm == JOptionPane.YES_OPTION) {
+                    this.dao.delete(maTK); // Gọi DAO xóa theo mã
+                    JOptionPane.showMessageDialog(btnXoa, "Xóa tài khoản nhân viên thành công");
+                    fillTable();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản để xóa");
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản để xóa");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Mã tài khoản không hợp lệ");
         }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Mã tài khoản không hợp lệ");
-    }
     }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void tblNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNhanVienMouseClicked
+        // TODO add your handling code here:
+        this.row = tblNhanVien.getSelectedRow();
+        String maTK = String.valueOf(tblNhanVien.getValueAt(this.row, 0));
+        String tenTK = String.valueOf(tblNhanVien.getValueAt(this.row, 1));
+        String email = String.valueOf(tblNhanVien.getValueAt(this.row, 2));
+        String sdt = String.valueOf(tblNhanVien.getValueAt(this.row, 3));
+        String password = String.valueOf(tblNhanVien.getValueAt(this.row, 4));
+        String permission = String.valueOf(tblNhanVien.getValueAt(this.row, 5));
+        TaiKhoanNVEntity nv = new TaiKhoanNVEntity(
+                Long.parseLong(maTK),
+                password,
+                tenTK,
+                email,
+                permission,
+                Integer.parseInt(sdt)
+        ); 
+        this.setNhanVien(nv);
+    }//GEN-LAST:event_tblNhanVienMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

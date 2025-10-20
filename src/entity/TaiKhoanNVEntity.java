@@ -19,38 +19,12 @@ public class TaiKhoanNVEntity {
     private int sdt;
 
     public TaiKhoanNVEntity(long maTK1, String password1, String tenTK1, String email1, String permission1, int sdt1) {
-    }
-
-    public TaiKhoanNVEntity(long maTK) {
-        this.maTK = maTK;
-    }
-
-    public TaiKhoanNVEntity(long maTK, String tenTK, String email, String permission, int sdt, Date namSinh) {
-        this.maTK = maTK;
-        this.tenTK = tenTK;
-        this.email = email;
-        this.permission = permission;
-        this.sdt = sdt;
-
-    }
-    
-    public TaiKhoanNVEntity(long maTK, String password, String tenTK, String email, String permission, int sdt, Date namSinh) {
-        this.maTK = maTK;
-        this.password = password;
-        this.tenTK = tenTK;
-        this.email = email;
-        this.permission = permission;
-        this.sdt = sdt;
-
-    }
-
-    public TaiKhoanNVEntity(String password, String tenTK, String email, String permission, int sdt, Date namSinh) {
-        this.password = password;
-        this.tenTK = tenTK;
-        this.email = email;
-        this.permission = permission;
-        this.sdt = sdt;
-
+        this.maTK = maTK1;
+        this.password = password1;
+        this.tenTK = tenTK1;
+        this.email = email1;
+        this.permission = permission1;
+        this.sdt = sdt1;
     }
 
     public long getMaTK() {
@@ -100,10 +74,7 @@ public class TaiKhoanNVEntity {
     public void setSdt(int sdt) {
         this.sdt = sdt;
     }
-
-
-   
-    }
+   }
     
 
     
