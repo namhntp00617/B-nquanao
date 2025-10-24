@@ -129,7 +129,14 @@ private void dangNhap() {
 
         jLabel4.setText("Mật khẩu");
 
-        txtMatkhau.setText("jPasswordField1");
+        txtTaikhoan.setText("Nhất nam");
+        txtTaikhoan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTaikhoanActionPerformed(evt);
+            }
+        });
+
+        txtMatkhau.setText("namthoi123");
         txtMatkhau.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMatkhauActionPerformed(evt);
@@ -207,6 +214,10 @@ private void dangNhap() {
     private void txtMatkhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatkhauActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMatkhauActionPerformed
+
+    private void txtTaikhoanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTaikhoanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTaikhoanActionPerformed
 
     /**
      * @param args the command line arguments

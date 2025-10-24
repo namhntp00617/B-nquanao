@@ -217,7 +217,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnDanhmuc">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Danh m&#x1ee5;c"/>
+            <Property name="text" type="java.lang.String" value="Ch&#x1ea5;t li&#x1ec7;u"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>

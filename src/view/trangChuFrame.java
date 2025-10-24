@@ -180,7 +180,7 @@ public class trangChuFrame extends javax.swing.JFrame {
             }
         });
 
-        btnDanhmuc.setText("Danh mục");
+        btnDanhmuc.setText("Chất liệu");
         btnDanhmuc.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnDanhmuc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -355,7 +355,7 @@ public class trangChuFrame extends javax.swing.JFrame {
 
     private void btnDanhmucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDanhmucActionPerformed
         // TODO add your handling code here:
-        hienBang(new danhMucPanel());
+        hienBang(new chatLieu());
     }//GEN-LAST:event_btnDanhmucActionPerformed
 
     /**

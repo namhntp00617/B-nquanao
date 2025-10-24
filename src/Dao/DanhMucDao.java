@@ -75,4 +75,22 @@ public class DanhMucDao {
             return false;
         }
 }
+        public DanhMucEntity getByName(String ten) {
+        DanhMucEntity danhMuc = null;
+        try {
+            Connection con = ConnectDB.getConnect();
+            String sql = "SELECT * FROM DanhMuc WHERE TenDM = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, ten);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                danhMuc = new DanhMucEntity(
+                        rs.getInt("MaDM"),
+                        rs.getString("TenDM"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return danhMuc;
+    }
 }

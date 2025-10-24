@@ -186,10 +186,16 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtTaikhoan">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Nh&#x1ea5;t nam"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTaikhoanActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="txtMatkhau">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jPasswordField1"/>
+        <Property name="text" type="java.lang.String" value="namthoi123"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMatkhauActionPerformed"/>
