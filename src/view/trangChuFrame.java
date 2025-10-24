@@ -355,7 +355,7 @@ public class trangChuFrame extends javax.swing.JFrame {
 
     private void btnDanhmucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDanhmucActionPerformed
         // TODO add your handling code here:
-        hienBang(new chatLieu());
+        hienBang(new danhMuc());
     }//GEN-LAST:event_btnDanhmucActionPerformed
 
     /**

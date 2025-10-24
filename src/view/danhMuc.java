@@ -16,14 +16,14 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author ADMIN
  */
-public class chatLieu extends javax.swing.JPanel {
+public class danhMuc extends javax.swing.JPanel {
 
     /**
-     * Creates new form chatLieu
+     * Creates new form danhMuc
      */
     private DanhMucDao danhMucDAO = new DanhMucDao();
 
-    public chatLieu() {
+    public danhMuc() {
         initComponents();
         JLabel lbl = new JLabel("Đây là giao diện quản lý danh mục");
         add(lbl);
@@ -84,6 +84,11 @@ public class chatLieu extends javax.swing.JPanel {
                 "Mã Danh Mục", "Tên Danh Mục"
             }
         ));
+        tblDanhMuc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDanhMucMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblDanhMuc);
         if (tblDanhMuc.getColumnModel().getColumnCount() > 0) {
             tblDanhMuc.getColumnModel().getColumn(1).setResizable(false);
@@ -121,6 +126,8 @@ public class chatLieu extends javax.swing.JPanel {
                 btnThemActionPerformed(evt);
             }
         });
+
+        txtMaDanhMuc.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -201,6 +208,14 @@ public class chatLieu extends javax.swing.JPanel {
             fillTableDanhMuc();
         }
     }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void tblDanhMucMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhMucMouseClicked
+        // TODO add your handling code here:
+        int row = tblDanhMuc.getSelectedRow();
+        if(row < 0) return;
+        txtMaDanhMuc.setText(tblDanhMuc.getValueAt(row, 0).toString());
+        txtTenDanhMuc.setText(tblDanhMuc.getValueAt(row, 1).toString());
+    }//GEN-LAST:event_tblDanhMucMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
