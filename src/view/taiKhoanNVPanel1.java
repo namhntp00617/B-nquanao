@@ -47,13 +47,14 @@ public class taiKhoanNVPanel1 extends javax.swing.JPanel {
         for (TaiKhoanNVEntity nv : dao.getAll()) {
             String Password = "********";
             Object row[] = {
-                nv.getMaTK(),
-                nv.getTenTK(),
-                nv.getEmail(),
-                nv.getSdt(),
-                nv.getPassword(),
-                nv.getPermission()
-            };
+            nv.getMaTK(),
+            nv.getTenTK(),
+            nv.getEmail(),
+            nv.getSdt(),
+            Password,           // <-- dùng chuỗi "*******" thay vì mật khẩu thật
+            nv.getPermission()
+};
+
             model.addRow(row);
         }
         tblNhanVien.setModel(model);
