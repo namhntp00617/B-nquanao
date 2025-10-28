@@ -50,7 +50,7 @@ public class hoaDonPanel extends javax.swing.JPanel {
      public void fillHDCTTable(int maHD) {
         DefaultTableModel model = (DefaultTableModel) tblCTHD.getModel();
         model.setRowCount(0);
-        for (HoaDonChiTietEntity hdct : dao.getAllByMaHD(maHD)) {
+        for (HoaDonChiTietEntity hdct : hdctDAO.getAllByMaHD(maHD)) {
             Object data[] = {hdct.getMaSP(), hdct.getTenSP(), hdct.getMauSac(), hdct.getKichThuoc(), hdct.getSoLuong(), hdct.getDonGia()};
             model.addRow(data);
         }
