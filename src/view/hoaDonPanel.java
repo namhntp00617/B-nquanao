@@ -1,6 +1,15 @@
 package view;
 
+import Dao.HoaDonChiTietDAO;
+import Dao.HoaDonDAO;
+import entity.HoaDonChiTietEntity;
+import entity.HoaDonEntity;
+import java.util.List;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -13,6 +22,8 @@ import javax.swing.JLabel;
  */
 public class hoaDonPanel extends javax.swing.JPanel {
 
+     HoaDonDAO dao = new HoaDonDAO();
+     HoaDonChiTietDAO hdctDAO = new HoaDonChiTietDAO();
     /**
      * Creates new form hoaDonPanel
      */
@@ -20,7 +31,49 @@ public class hoaDonPanel extends javax.swing.JPanel {
         initComponents();
          JLabel lbl = new JLabel("Đây là giao diện quản lý hóa đơn");
         add(lbl);
+        fillTable();
     }
+    
+     public void fillTable() {
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+        model.setRowCount(0);
+        for (HoaDonEntity hd : dao.getAllHD()) {
+            Object data[] = {hd.getMaHD(),
+                hd.getTenKH(),
+                hd.getHinhThucTT(),
+                hd.getTrangThai()};
+            model.addRow(data);
+        }
+        tblHoaDon.setModel(model);
+    }
+     
+     public void fillHDCTTable(int maHD) {
+        DefaultTableModel model = (DefaultTableModel) tblCTHD.getModel();
+        model.setRowCount(0);
+        for (HoaDonChiTietEntity hdct : dao.getAllByMaHD(maHD)) {
+            Object data[] = {hdct.getMaSP(), hdct.getTenSP(), hdct.getMauSac(), hdct.getKichThuoc(), hdct.getSoLuong(), hdct.getDonGia()};
+            model.addRow(data);
+        }
+        tblCTHD.setModel(model);
+    }
+     
+     public void loadTable(List<HoaDonEntity> list) {
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+        model.setRowCount(0);
+        for (HoaDonEntity hd : list) {
+            model.addRow(new Object[]{
+                hd.getMaHD(),
+                hd.getMaKH(),
+                hd.getMaNV(),
+                hd.getTenKH(),
+                hd.getHinhThucTT(),
+                hd.getTongTien(),
+                hd.getTrangThai(),
+                hd.getNgayTao()
+            });
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,15 +87,15 @@ public class hoaDonPanel extends javax.swing.JPanel {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        tblCTHD = new javax.swing.JTable();
+        btnTimKiem = new javax.swing.JButton();
+        txtMaHoaDon = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblHoaDon = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnCaiLai = new javax.swing.JButton();
+        btnLoc = new javax.swing.JButton();
 
         setMinimumSize(new java.awt.Dimension(800, 535));
         setPreferredSize(new java.awt.Dimension(800, 500));
@@ -50,7 +103,7 @@ public class hoaDonPanel extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setText("Quản lý hóa đơn");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblCTHD.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -61,13 +114,18 @@ public class hoaDonPanel extends javax.swing.JPanel {
                 "Mã SP", "Tên Sản phẩm", "Số lượng bán", "giá", "Thành tiền", "Màu sắc ", "Kích thước"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblCTHD);
 
-        jButton1.setText("Tìm kiếm");
+        btnTimKiem.setText("Tìm kiếm");
+        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Mã hóa đơn");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -78,25 +136,30 @@ public class hoaDonPanel extends javax.swing.JPanel {
                 "Mã HD", "Tên KH", "Thanh toán", "Hình thức thanh toán", "Trạng thái"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tblHoaDon);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel4.setText("Chi tiết hoá đơn");
 
-        jButton6.setBackground(new java.awt.Color(255, 255, 255));
-        jButton6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton6.setForeground(new java.awt.Color(30, 30, 30));
-        jButton6.setText("Cài lại");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        btnCaiLai.setBackground(new java.awt.Color(255, 255, 255));
+        btnCaiLai.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCaiLai.setForeground(new java.awt.Color(30, 30, 30));
+        btnCaiLai.setText("Cài lại");
+        btnCaiLai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                btnCaiLaiActionPerformed(evt);
             }
         });
 
-        jButton7.setBackground(new java.awt.Color(255, 255, 255));
-        jButton7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton7.setForeground(new java.awt.Color(30, 30, 30));
-        jButton7.setText("Lọc");
+        btnLoc.setBackground(new java.awt.Color(255, 255, 255));
+        btnLoc.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnLoc.setForeground(new java.awt.Color(30, 30, 30));
+        btnLoc.setText("Lọc");
+        btnLoc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLocActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -106,13 +169,13 @@ public class hoaDonPanel extends javax.swing.JPanel {
                 .addGap(21, 21, 21)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtMaHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(btnTimKiem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
-                .addComponent(jButton6)
+                .addComponent(btnCaiLai)
                 .addGap(18, 18, 18)
-                .addComponent(jButton7)
+                .addComponent(btnLoc)
                 .addGap(87, 87, 87))
             .addComponent(jScrollPane1)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -136,11 +199,11 @@ public class hoaDonPanel extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTimKiem)
+                    .addComponent(txtMaHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCaiLai, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLoc, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -150,23 +213,42 @@ public class hoaDonPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void btnCaiLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCaiLaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_btnCaiLaiActionPerformed
+
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+        // TODO add your handling code here:
+        String maHDCanTim = txtMaHoaDon.getText().trim();
+        if (maHDCanTim.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã sản phẩm cần tìm.");
+            return;
+        }
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        tblHoaDon.setRowSorter(sorter);
+
+        RowFilter<DefaultTableModel, Object> filter = RowFilter.regexFilter("^" + maHDCanTim + "$", 0);
+        sorter.setRowFilter(filter);
+    }//GEN-LAST:event_btnTimKiemActionPerformed
+
+    private void btnLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLocActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCaiLai;
+    private javax.swing.JButton btnLoc;
+    private javax.swing.JButton btnTimKiem;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblCTHD;
+    private javax.swing.JTable tblHoaDon;
+    private javax.swing.JTextField txtMaHoaDon;
     // End of variables declaration//GEN-END:variables
 }
